@@ -1,0 +1,22 @@
+<%- include ("partials/header.ejs") %>
+
+<h3>Your generated reference number is: <b><%= generatedRefNo %></b></h3>
+
+<table>
+  <tr>
+    <td>
+      <form class="form-horizontal" action="/save" method="post">
+        <button type="submit" name="userConsent" value="<%= generatedRefNo %>" class="btn btn-primary btn-sm">Accept reference number</button>
+        <input type="hidden" name="counterValue" value="<%= generatedCounter %>">
+      </form>
+    </td>
+    <td>
+      <form class="" action="/" method="get">
+        <button type="submit" name="redirectToHome" class="btn btn-warning btn-sm" action="/" method="get">Reject reference number</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+<%- include ("partials/footer.ejs") %>
