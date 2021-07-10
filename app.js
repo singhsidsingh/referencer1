@@ -107,6 +107,13 @@ app.get("/", function(req, res) {
   res.render("home");
 });
 
+// Handling undefined routes
+app.all('*', function(req, res) {
+  res.status(404).render("error", {
+    errorCode: 404
+  });
+});
+
 /* Starting server */
 // We use process.env.PORT so that app may be deployed on Heroku
 // We also use || 3000 for testing on local system
