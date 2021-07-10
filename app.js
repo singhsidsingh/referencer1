@@ -110,6 +110,11 @@ app.get("/", function(req, res) {
 /* Starting server */
 // We use process.env.PORT so that app may be deployed on Heroku
 // We also use || 3000 for testing on local system
-app.listen(process.env.PORT || 3000, function() {
-  console.log("Server started.")
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
+app.listen(port, function() {
+  console.log("Server has started successfully.")
 });
