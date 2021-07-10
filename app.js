@@ -110,7 +110,8 @@ app.get("/", function(req, res) {
 // Handling undefined routes
 app.all('*', function(req, res) {
   res.status(404).render("error", {
-    errorCode: 404
+    errorCode: 404,
+    errorMessage: "Page not found."
   });
 });
 
