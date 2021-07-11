@@ -18,6 +18,7 @@ const moment = require("moment");
 
 /* Initializing Moment.js */
 const momentDate = moment();
+const currentDateValue = momentDate.format("DDMMYY");
 
 /* Creating Express application */
 // 'app' is traditionally the name given to the object created by calling the express() function
@@ -64,18 +65,34 @@ app.get("/generate", function(req, res) {
 
   // The following code extracts the latest inserted counter value and increments it
   // It then generates a new reference number based on the updated counter value
-  Reference.find({}).sort({
-    _id: -1
-  }).limit(1).then(function(queryResult) {
-    // Update counter value and generate new reference number
-    var updatedCounter = queryResult[0].counter + 1;
-    var newReferenceNo = "RCC/BRL/" + momentDate.format("DDMMYY") + "/" + updatedCounter;
 
-    // Send the value back to generateRefNo.ejs
-    res.render("generateRefNo", {
-      generatedRefNo: newReferenceNo,
-      generatedCounter: updatedCounter
-    });
+  let promise = Reference.exists({
+    date: currentDateValue
+  });
+
+  promise.then(function(doc) {
+    if (!doc) {
+      // Date not found in DB
+      res.render("generateRefNo", {
+        generatedRefNo: "RCC/BRL/" + currentDateValue + "/" + "1",
+        generatedCounter: 1,
+      });
+    } else {
+      // Date found in DB
+      Reference.find({}).sort({
+        _id: -1
+      }).limit(1).then(function(queryResult) {
+        // Update counter value and generate new reference number
+        var updatedCounter = queryResult[0].counter + 1;
+        var newReferenceNo = "RCC/BRL/" + currentDateValue + "/" + updatedCounter;
+
+        // Send the value back to generateRefNo.ejs
+        res.render("generateRefNo", {
+          generatedRefNo: newReferenceNo,
+          generatedCounter: updatedCounter
+        });
+      });
+    }
   });
 });
 
@@ -84,13 +101,12 @@ app.post("/save", function(req, res) {
   // Obtain values from DOM
   var obtainedReferenceNumber = req.body.userConsent;
   var obtainedCounter = req.body.counterValue;
-  var currentDate = momentDate.format("DDMMYY");
 
   // Push new document to MongoDB db and redirect to postSave.ejs
   const newReference = new Reference({
     referenceNumber: obtainedReferenceNumber,
     counter: obtainedCounter,
-    date: currentDate
+    date: currentDateValue
   });
 
   newReference.save().then(function() {
