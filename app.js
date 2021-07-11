@@ -37,11 +37,6 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 /* Connecting to our MongoDB databse with Mongoose */
-// mongoose.connect("mongodb://localhost:27017/referencerDB", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
-
 mongoose.connect("mongodb+srv://admin-siddharth:SIDhcst8!@cluster0.urbun.mongodb.net/referencerDB?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -49,7 +44,8 @@ mongoose.connect("mongodb+srv://admin-siddharth:SIDhcst8!@cluster0.urbun.mongodb
 
 const referenceSchema = {
   referenceNumber: String,
-  counter: Number
+  counter: Number,
+  date: String
 }
 
 const Reference = mongoose.model("Reference", referenceSchema);
@@ -73,7 +69,7 @@ app.get("/generate", function(req, res) {
   }).limit(1).then(function(queryResult) {
     // Update counter value and generate new reference number
     var updatedCounter = queryResult[0].counter + 1;
-    var newReferenceNo = "RCC/BRL/" + momentDate.format("YYYY") + "/" + updatedCounter;
+    var newReferenceNo = "RCC/BRL/" + momentDate.format("DDMMYY") + "/" + updatedCounter;
 
     // Send the value back to generateRefNo.ejs
     res.render("generateRefNo", {
@@ -88,11 +84,13 @@ app.post("/save", function(req, res) {
   // Obtain values from DOM
   var obtainedReferenceNumber = req.body.userConsent;
   var obtainedCounter = req.body.counterValue;
+  var currentDate = momentDate.format("DDMMYY");
 
   // Push new document to MongoDB db and redirect to postSave.ejs
   const newReference = new Reference({
     referenceNumber: obtainedReferenceNumber,
-    counter: obtainedCounter
+    counter: obtainedCounter,
+    date: currentDate
   });
 
   newReference.save().then(function() {
@@ -117,7 +115,7 @@ app.all('*', function(req, res) {
 
 /* Starting server */
 // We use process.env.PORT so that app may be deployed on Heroku
-// We also use || 3000 for testing on local system
+// We also use port 3000 for testing on local system
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
