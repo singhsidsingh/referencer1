@@ -93,7 +93,7 @@ app.get("/generate", function(req, res) {
         });
       });
     }
-  });
+  })
 });
 
 // Route to save newly generated reference number to // DB

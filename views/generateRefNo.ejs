@@ -2,21 +2,39 @@
 
 <h3>Your generated reference number is: <b><%= generatedRefNo %></b></h3>
 
-<table>
-  <tr>
-    <td>
-      <form class="form-horizontal" action="/save" method="post">
-        <button type="submit" name="userConsent" value="<%= generatedRefNo %>" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Accept reference number</button>
-        <input type="hidden" name="counterValue" value="<%= generatedCounter %>">
-      </form>
-    </td>
-    <td>
-      <form class="" action="/" method="get">
-        <button type="submit" name="redirectToHome" class="btn btn-warning btn-sm" action="/" method="get"><i class="fas fa-times"></i> Reject reference number</button>
-      </form>
-    </td>
-  </tr>
-</table>
+<div class="form-group">
+  <table>
+    <tr>
+      <td>
+        <form class="" action="/save" method="post">
+          <button type="submit" name="userConsent" value="<%= generatedRefNo %>" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Accept reference number</button>
+          <input type="hidden" name="counterValue" value="<%= generatedCounter %>">
+        </form>
+      </td>
+      <td>
+        <form class="" action="/" method="get">
+          <button type="submit" name="redirectToHome" class="btn btn-warning btn-sm" action="/" method="get"><i class="fas fa-times"></i> Reject reference number</button>
+        </form>
+      </td>
+    </tr>
+  </table>
+  <br />
+  <table>
+    <tr>
+      <td>
+        <textarea name="name" rows="8" cols="50"></textarea>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+
+
+
+
+
+
 
 
 <%- include ("partials/footer.ejs") %>
