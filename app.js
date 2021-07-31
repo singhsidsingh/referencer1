@@ -5,6 +5,9 @@
 // Node version being used: 14.16.1
 // Procfile added in root directory for telling Heroku how to run this app
 
+// The following is required for using environment variables
+require('dotenv').config();
+
 // Express JS is a web application framework for node.js
 const express = require("express");
 // Body Parser is a body parsing framework for node.js
@@ -15,6 +18,9 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 // Moment.js takes the pain out of working with dates and time
 const moment = require("moment");
+
+// Specifying the path for our remote MongoDB
+const path = process.env.MONGODB_PATH1 + process.env.MONGODB_PASSWORD + process.env.MONGODB_PATH2;
 
 /* Initializing Moment.js */
 const momentDate = moment();
@@ -38,7 +44,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 /* Connecting to our MongoDB databse with Mongoose */
-mongoose.connect("mongodb+srv://admin-siddharth:SIDhcst8!@cluster0.urbun.mongodb.net/referencerDB?retryWrites=true&w=majority", {
+mongoose.connect(path, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
